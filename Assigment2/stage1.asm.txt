@@ -1,0 +1,33 @@
+//Stage 1 – Game Setup
+//Match Stick Game
+//Enter Name
+      MOV R10, #NameInput
+      STR R10, .WriteString 
+      MOV R9, #Playername
+      STR R9, .ReadString
+      STR R9, .WriteString
+//Enter MatchStick
+prompt:
+      MOV R10, #Question1
+      STR R10, .WriteString
+      LDR R0, .InputNum
+      CMP R0, #10
+      BLT prompt
+      CMP R0, #100
+      BGT prompt
+      STR R0, .WriteUnsignedNum
+//Print Output
+      MOV R10, #NameDisplay
+      STR R10, .WriteString
+      STR R9, .WriteString
+      MOV R10, #matchsticknum
+      STR R10, . WriteString
+      STR R0, .WriteUnsignedNum
+      HALT
+//RequiredInput
+NameInput: .ASCIZ "Please enter your name: "
+Playername: .BLOCK 128
+Question1: .ASCIZ "\nHow many matchsticks (10-100)?"
+//Printout 
+NameDisplay: .ASCIZ "\nPlayer 1 is "
+matchsticknum: .ASCIZ "\nMatchsticks: "

@@ -1,0 +1,121 @@
+//Stage 3 – Implement Human versus Compute
+//Match Stick Game
+//Enter Name
+      MOV R10, #NameInput
+      STR R10, .WriteString
+      MOV R9, #Playername
+      STR R9, .ReadString
+      STR R9, .WriteString
+//Enter MatchStick
+prompt:
+      MOV R10, #Question1
+      STR R10, .WriteString
+      LDR R0, .InputNum
+      STR R0, .WriteUnsignedNum
+      CMP R0, #10
+      BLT prompt
+      CMP R0, #100
+      BGT prompt
+//Print Output
+loop:
+      MOV R10, #NameDisplay
+      STR R10, .WriteString 
+      STR R9, .WriteString
+      MOV R10, #thereare
+      STR R10, .WriteString
+      STR R0, .WriteUnsignedNum
+      MOV R10, #matchsticknum
+      STR R10, .WriteString
+//Game Start
+//Human Turn:
+      MOV R10, #NameDisplay
+      STR R10, .WriteString
+      STR R9, .WriteString
+      MOV R10, #Question2
+      STR R10, .WriteString
+      LDR R8, .InputNum
+      CMP R8, #1 
+      BLT loop
+      CMP R8, #7
+      BGT loop
+      STR R8, .WriteUnsignedNum
+//Calculation
+      SUB R0,R0,R8
+      CMP R0, #0 
+      BEQ end
+//Display player win
+      CMP R0,#1
+      BEQ playerwin
+//Computer Turn
+      MOV R10, #computerturn
+      STR R10, .WriteString
+select: 
+      LDR R11, .Random
+      AND R11,R11,#7
+      CMP R11,#0
+      BEQ select
+      CMP R0,R11
+      BLT select
+      MOV R10, #remove
+      STR R10, .WriteString
+//Calculation
+      SUB R0,R0,R11
+      STR R11, .WriteUnsignedNum
+      CMP R0,#1
+      BEQ cmpwin
+      CMP R0, #0 
+      BGT loop
+      CMP R0, #0 
+      BEQ end
+cmpwin: 
+      MOV R10, #NameDisplay
+      STR R10, .WriteString
+      STR R9, .WriteString
+      MOV R10, #humanlost
+      STR R10, .WriteString
+      B resetgame
+playerwin:
+      MOV R10, #NameDisplay
+      STR R10, .WriteString
+      STR R9, .WriteString
+      MOV R10, #humanwin
+      STR R10,. WriteString
+      B resetgame
+end:
+      MOV R10, #gamedraw
+      STR R10, .WriteString
+      B resetgame
+//PLAY OR END MESSAGE
+resetgame:
+      MOV R10, #Question3
+      STR R10, .WriteString
+      MOV R7, #Playereset
+      STR R7, .ReadString
+      LDRB R7, [R7]
+      CMP R7, #121
+      BEQ prompt
+      CMP R7, #110 
+      BEQ finish
+      B resetgame
+//Game Finish Promgram HALT
+finish:
+      HALT
+////Required input for game setup messages
+NameInput: .ASCIZ "Please enter your name: "
+Playername: .BLOCK 128
+Question1: .ASCIZ "\nHow many matchsticks (10-100)?"
+//Player turn display messages
+NameDisplay: .ASCIZ "\nPlayer "
+thereare: .ASCIZ " ,there are "
+matchsticknum: .ASCIZ "matchsticks remaining.\n"
+Question2: .ASCIZ ", how many do you want to remove (1-7)?"
+//Computer turn display messages
+remove: .ASCIZ "\nComputer removed: "
+computerturn: .ASCIZ "\nComputer Player's turn"
+//Game result messages
+humanlost: .ASCIZ " , YOU LOSE!\n"
+humanwin: .ASCIZ " , YOU WINS!\n"
+gamedraw: .ASCIZ "\nIt’s a draw!\n"
+//Ask Play or end game messages
+Question3: .ASCIZ "\nPlay again (y/n) ?"
+Playereset: .BLOCK 100

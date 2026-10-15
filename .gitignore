@@ -1,0 +1,12 @@
+# macOS metadata
+.DS_Store
+
+# Microsoft Office temporary lock files
+~$*
+
+# Editor and build caches
+.vscode/
+.idea/
+bin/
+obj/
+
